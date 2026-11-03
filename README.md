@@ -5,3 +5,5 @@ Every push to the `main` branch is deployed automatically by Hostinger's Git aut
 
 - New articles live in `insights/` and must be linked from `insights.html` and listed in `sitemap.xml`.
 - When changing text on an existing page, update both `page.html` and its matching `.txt` files, or visitors who click through from another page may see the old text.
+
+Auto-deployment connected on 2026-11-03.
