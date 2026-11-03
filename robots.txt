@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /thank-you
+
+Sitemap: https://kamranvisuals.com/sitemap.xml

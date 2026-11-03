@@ -1,0 +1,9 @@
+:HL["/_next/static/chunks/0e2zo7ooqq0g5.css","style"]
+:HL["/_next/static/media/cormorant_garamond_latin_500_italic-s.p.0p-d800d619j9.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/cormorant_garamond_latin_500_normal-s.p.1ua6lqq3rsqyo.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/cormorant_garamond_latin_600_normal-s.p.2k7r9iymu8ux8.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/inter_latin_wght_normal-s.p.0gsaq8ukbf34m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":{"n":"slug","t":"d","k":"walnut-and-stone-kitchen","s":[]},"h":96,"c":"$Q3"}]]
+1:[["children",{"s":"portfolio","h":64,"c":"$Q2"}]]
+0:{"b":"v61n5dfR1gm_Y_MfaML8d","t":{"t":{"s":"","h":16,"c":"$Q1"}}}

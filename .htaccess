@@ -1,0 +1,91 @@
+# Kamran Architectural Visuals — plain-HTML build on Hostinger (Apache/LiteSpeed).
+# Copied into the site root by scripts/build-hostinger.sh. Replaces the
+# redirects and security headers that next.config.ts provides on Node hosting.
+
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# HTTPS and the bare domain (www → kamranvisuals.com). Only on the real domain,
+# so Hostinger's temporary preview address keeps working.
+RewriteCond %{HTTP_HOST} kamranvisuals\.com$ [NC]
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://kamranvisuals.com%{REQUEST_URI} [R=301,L,NE]
+
+# Old URLs from before the keyword restructure
+RewriteRule ^contact/?$ /get-a-quote [R=301,L]
+RewriteRule ^services/3d-floor-plans/?$ /3d-floor-plans [R=301,L]
+RewriteRule ^services/(exterior|interior)-rendering/?$ /3d-rendering-services [R=301,L]
+RewriteRule ^services/architectural-walkthrough-animation/?$ /3d-walkthrough-video [R=301,L]
+RewriteRule ^services/real-estate-visualization/?$ /real-estate-3d-floor-plans [R=301,L]
+
+# Hide the .html ending: /pricing.html → /pricing
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
+RewriteRule ^index$ / [R=301,L]
+
+# One address per page: drop a trailing slash (/pricing/ → /pricing)
+RewriteCond %{REQUEST_URI} !^/$
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# Serve /pricing from pricing.html (also /portfolio, which has a folder of the same name)
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+)$ /$1.html [L]
+</IfModule>
+
+# A folder next to a page of the same name must not trigger /portfolio → /portfolio/
+<IfModule mod_dir.c>
+DirectorySlash Off
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "DENY"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+Header always set Cross-Origin-Opener-Policy "same-origin"
+Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' blob:; connect-src 'self'; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+</IfModule>
+
+# Generated social preview image has no file extension
+<Files "opengraph-image">
+  ForceType image/png
+</Files>
+<Files "inquiry-config.json">
+  <IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex"
+  </IfModule>
+</Files>
+
+# Never serve the build's internal data files as pages
+<FilesMatch "\.(txt)$">
+  <IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex"
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/html "access plus 0 seconds"
+ExpiresByType image/webp "access plus 30 days"
+ExpiresByType image/png "access plus 30 days"
+ExpiresByType image/svg+xml "access plus 30 days"
+ExpiresByType video/mp4 "access plus 30 days"
+ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Hashed build files never change
+<IfModule mod_headers.c>
+<If "%{REQUEST_URI} =~ m#^/_next/static/#">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</If>
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/plain application/xml
+</IfModule>
